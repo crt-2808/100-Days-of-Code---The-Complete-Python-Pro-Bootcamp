@@ -73,14 +73,17 @@ scissors = '''
 
 #Write your code below this line 👇
 elements=[rock, paper, scissors]
-user_election=int(input("What do you want to choose: Type 0 for Rock, 1 for Paper or 2 for Scissors. \n"))
-print(elements[user_election])
-print("Computer chose:")
-computer_election=random.randint(0, 2)
-print(elements[computer_election])
-if(user_election==computer_election):
-    print("It is a tie")
-elif((computer_election+1==user_election)or(computer_election==2 and user_election==0)):
-    print("You Win")
+user_election=int(input("What do you want to choose? Type 0 for Rock, 1 for Paper or 2 for Scissors. \n"))
+if(user_election>2):
+    print("You choose an invalid number, you loose")
 else:
-    print("You loose")
+    print(elements[user_election])
+    print("Computer chose:")
+    computer_election=random.randint(0, 2)
+    print(elements[computer_election])
+    if(user_election==computer_election):
+            print("It is a tie")
+    elif((computer_election+1==user_election)or(computer_election==2 and user_election==0)):
+            print("You Win")
+    else:
+            print("You loose")
