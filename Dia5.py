@@ -74,7 +74,7 @@ for char in range(1, nr_numbers+1):
   password+=random.choice(numbers)
 
 
-print(password)
+print(f"Your password is {password}")
 #Hard Level - Order of characters randomised:
 #e.g. 4 letter, 2 symbol, 2 number = g^2jk8&P
 password_hard=[]
@@ -93,5 +93,5 @@ password_hard_final=''
 for i in password_hard:
   password_hard_final+=i
   
-print(password_hard_final)
+print(f"Your password is {password_hard_final}")
 
