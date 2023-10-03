@@ -1,6 +1,4 @@
 from art import logo
-print(logo)
-
 def add(num1, num2):
     return num1+num2
 
@@ -14,29 +12,33 @@ def div(num1, num2):
     return num1/num2
 
 
-operation={
+operations={
     "+": add,
     "-": substract,
     "*": mult,
     "/": div
 }
+def calculator():
+    print(logo)
+    num1=float(input("What's the first number?: "))
+    for symbol in operations:
+        print(symbol)
 
-num1=int(input("What's the first number?: "))
-for symbol in operation:
-    print(symbol)
-function=input("What operation do you want to do? Please type one of the symbols above: ")
-num2=int(input("What's the second number?: "))
+    shoud_continue=True    
+    while shoud_continue:
+        function=input("What operation do you want to do?: ")
+        num2=float(input("What's the next number?: "))
 
-calculation_function=operation[function]
-result=calculation_function(num1, num2)
-
-print(f"{num1} {calculation_function} {num2} = {result}")
-
-for symbols in operation:
-    print(symbol)
-function=input("What operation do you want to do? Please type one of the symbols above: ")
-num3=int(input("What's the next number?: "))
-
-calculation_function=operation[function]
-result_2=calculation_function(result, num3)
-print(f"{result} {calculation_function} {num3} = {result_2}")
+        calculation_function=operations[function]
+        answer=calculation_function(num1, num2)
+        print(f"{num1} {function} {num2} = {answer}")
+        user_decision=input(f"Type 'y' to continue calculating with {answer} or type 'n' to start a new calculation. If you want to exit, type 'exit' to end the program: ").lower()
+        if user_decision =="y":
+            num1=answer
+        elif user_decision=="n":
+            shoud_continue=False
+            calculator()
+        else:
+            shoud_continue=False
+            
+calculator()
