@@ -7,6 +7,10 @@ def check_number(number):
         return("Too high. \nGuess again.")
     elif number<GUESS_NUMBER:
         return("Too low. \nGuess again.")
+    
+def less_life(attemps):
+    attemps-=1
+    return attemps
 
 def hard_level():
     player_attemps=5
@@ -15,7 +19,7 @@ def hard_level():
         user_guess=int(input("Make a guess: "))
         if user_guess!=GUESS_NUMBER:
             print(check_number(user_guess))
-            player_attemps-=1
+            player_attemps=less_life(player_attemps)
         else:
             return(f"You got it! the number was {GUESS_NUMBER}")
     return(f"You didn't got it, the number was {GUESS_NUMBER}")
@@ -28,7 +32,7 @@ def easy_level():
         user_guess=int(input("Make a guess: "))
         if user_guess!=GUESS_NUMBER:
             print(check_number(user_guess))
-            player_attemps-=1
+            player_attemps=less_life(player_attemps)
         else:
             return(f"You got it! the number was {GUESS_NUMBER}")
     return(f"You didn't got it, the number was {GUESS_NUMBER}")
