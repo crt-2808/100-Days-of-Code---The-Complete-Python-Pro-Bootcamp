@@ -9,6 +9,8 @@ continue_game=False
 
 celeb1=random.randint(0,49)
 celeb2=random.randint(0,49)
+if celeb1==celeb2:
+    celeb2=random.randint(0,49)
 while not continue_game:    
     print(f"Compare A {data.data[celeb1]["name"]}, a {data.data[celeb1]["description"]} from {data.data[celeb1]["country"]}")
     print(art.vs)
@@ -18,13 +20,16 @@ while not continue_game:
         if data.data[celeb1]["follower_count"]>=data.data[celeb2]["follower_count"]:
             MAX_SCORE+=1
         else:
-            print(f"You guess it wrong, your score was: {MAX_SCORE}")
+            print("You guess it wrong")
             continue_game=True
     elif user_input=="B":
         if data.data[celeb2]["follower_count"]>=data.data[celeb1]["follower_count"]:
             MAX_SCORE+=1
             celeb1=celeb2
         else:
-            print(f"You guess it wrong, your score was: {MAX_SCORE}")
+            print(f"You guess it wrong")
             continue_game=True
     celeb2=random.randint(0,49)
+    if celeb1==celeb2:
+        celeb2=random.randint(0,49)
+    print(f"Your score is {MAX_SCORE}")
