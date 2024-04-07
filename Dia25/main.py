@@ -17,12 +17,14 @@ while len(guessed_states)<50:
     
     if answer_state=="Exit":
         missing_states=[]
-        for state in all_states:
-            if state not in guessed_states:
-                missing_states.append(state)
-        new_data=pandas.DataFrame(missing_states)
-        new_data.to_csv("./Dia25/states_to_learn.csv")
+
+        csv_missing_data=[state for state in all_states if state not in guessed_states]
+        print(csv_missing_data)
+        data_to_csv=pandas.DataFrame(csv_missing_data)
+        data_to_csv.to_csv("./Dia25/states_to_learn.csv")
         break
+        
+
 
     if answer_state in all_states:
         guessed_states.append(answer_state)
