@@ -17,6 +17,8 @@
 
 # 4. Send the letter generated in step 3 to that person's email address.
 # HINT: Gmail(smtp.gmail.com), Yahoo(smtp.mail.yahoo.com), Hotmail(smtp.live.com), Outlook(smtp-mail.outlook.com)
+#"emcdrrstvnmljuqx"
+
 import pandas
 import smtplib
 import datetime as dt
@@ -24,7 +26,6 @@ import random
 
 myEmail=""
 myPassword=""
-
 today=dt.datetime.now()
 today_tuple=(today.month, today.day)
 
