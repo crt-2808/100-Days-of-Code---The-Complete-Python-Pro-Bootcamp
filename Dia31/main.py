@@ -19,8 +19,8 @@ def is_known():
     language_dic.remove(current_card)
     data=pandas.DataFrame(language_dic)
     data.to_csv("./Dia31/data/words_to_learn.csv", index=False)
-
     new_word()
+
 
 def new_word():
     global current_card, filp_timer
