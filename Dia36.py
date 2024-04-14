@@ -33,11 +33,12 @@ def getNews():
     client=Client(os.getenv("account_sid"), os.getenv("auth_token"))
 
     for article in formatted_articles:
-        messages = client.messages.create(
+        message = client.messages.create(
             body=article,
             from_=os.getenv("twilio_phone"),
             to=os.getenv("MY_PHONE")
         )
+        print(message.status)
 
 
 stock_response=requests.get(STOCK_ENDPOINT, params=stock_PARAMS)
