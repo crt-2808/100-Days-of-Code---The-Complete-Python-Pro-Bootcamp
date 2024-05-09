@@ -14,6 +14,14 @@ def html():
 def movie():
     return render_template("Dia43.html")
 
+@app.route("/Paradigm")
+def paradigm():
+    return render_template("starting.html")
+
+@app.route("/presentation")
+def presentation():
+    return render_template("presentation.html")
+
 if __name__=="__main__":
     app.run(debug=True)
 
