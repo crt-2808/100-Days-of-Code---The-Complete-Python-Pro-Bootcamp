@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <form action="{{ url_for('recived_data') }}" method="post">
+        <label for="name">Name: </label>
+        <input name="name" type="text" placeholder="Type your name" />
+        
+        <label for="password">Password: </label>
+        <input name="password" type="password" placeholder="Type your password" />
+
+        <button type="submit">Ok</button>
+        </form>
+    </body>
+</html>
