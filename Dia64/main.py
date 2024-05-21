@@ -7,34 +7,111 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 import requests
+import dotenv
+import os
 
-'''
-Red underlines? Install the required packages first: 
-Open the Terminal in PyCharm (bottom left). 
-
-On Windows type:
-python -m pip install -r requirements.txt
-
-On MacOS type:
-pip3 install -r requirements.txt
-
-This will install the packages from requirements.txt for this project.
-'''
+dotenv.load_dotenv()
+movie_API=os.getenv("MOVIE_API")
+MOVIE_URL="https://api.themoviedb.org/3/search/movie"
+MOVIE_IMAGE_URL="https://image.tmdb.org/t/p/w500"
+MOVIE_INFO_URL="https://api.themoviedb.org/3/movie/"
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 Bootstrap5(app)
 
-# CREATE DB
+##CREATE DB
+class Base(DeclarativeBase):
+    pass
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///movies_app.db'
+db = SQLAlchemy(model_class=Base)
+db.init_app(app)
 
 
-# CREATE TABLE
+##CREATE TABLE
+class Movie(db.Model):
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    title: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
+    year: Mapped[int] = mapped_column(Integer, nullable=False)
+    description: Mapped[str] = mapped_column(String(500), nullable=False)
+    rating: Mapped[float] = mapped_column(Float, nullable=True)
+    ranking: Mapped[int] = mapped_column(Integer, nullable=True)
+    review: Mapped[str] = mapped_column(String(250), nullable=True)
+    img_url: Mapped[str] = mapped_column(String(250), nullable=False)
 
+with app.app_context():
+    db.create_all()
+
+class RateMovieForm(FlaskForm):
+    rating = StringField("Your Rating Out of 10 e.g. 7.5")
+    review = StringField("Your Review")
+    submit = SubmitField("Done")
+
+class AddMovie(FlaskForm):
+    title=StringField("Movie title", validators=[DataRequired()])
+    submit= SubmitField("Add movie")
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    result = db.session.execute(db.select(Movie).order_by(Movie.rating))
+    all_movies = result.scalars().all()
+    for i in range(len(all_movies)):
+        all_movies[i].ranking = len(all_movies) - i
+    db.session.commit()
+    return render_template("index.html", movies=all_movies)
 
+# Adding the Update functionality
+@app.route("/edit", methods=["GET", "POST"])
+def rate_movie():
+    form = RateMovieForm()
+    movie_id = request.args.get("id")
+    movie = db.get_or_404(Movie, movie_id)
+    if form.validate_on_submit():
+        movie.rating = float(form.rating.data)
+        movie.review = form.review.data
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template("edit.html", movie=movie, form=form)
+
+@app.route("/add", methods=["GET", "POST"])
+def add_movie():
+    form=AddMovie()
+    if form.validate_on_submit():
+        movie_name=form.title.data
+        response=requests.get(MOVIE_URL, params={"api_key": movie_API, "query":movie_name})
+        data=response.json()["results"]
+        return render_template("select.html", options=data)
+    return render_template("add.html", form=form)
+
+@app.route("/delete")
+def delete():
+    movie_id=request.args.get('id')
+    movie_to_delete=db.get_or_404(Movie, movie_id)
+    db.session.delete(movie_to_delete)
+    db.session.commit()
+    return redirect(url_for("home"))
+
+@app.route("/find")
+def find_movie():
+    movie_id = request.args.get("id")
+    if movie_id:
+        movie_api_url = f"{MOVIE_INFO_URL}/{movie_id}"
+        response = requests.get(movie_api_url, params={"api_key": movie_API, "language":"en-US"})
+        data = response.json()
+        new_movie = Movie(
+            title=data["title"],
+            year=data["release_date"].split("-")[0],
+            img_url=f"{MOVIE_IMAGE_URL}/{movie_id}/images",
+            description=data["overview"],
+            rating=0,
+            ranking=0,
+            review=""
+
+        )
+        db.session.add(new_movie)
+        db.session.commit()
+        return redirect(url_for("rate_movie", id=new_movie.id))
+      
 
 if __name__ == '__main__':
     app.run(debug=True)

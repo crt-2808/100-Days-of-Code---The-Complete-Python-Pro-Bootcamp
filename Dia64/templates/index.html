@@ -6,32 +6,33 @@
 <div class="container">
   <h1 class="heading">My Top 10 Movies</h1>
   <p class="description">These are my all-time favourite movies.</p>
-   
+   {% for register in  movies %}
   <div class="card" >
-    <div class="front" style="background-image: url('https://www.shortlist.com/media/images/2019/05/the-30-coolest-alternative-movie-posters-ever-2-1556670563-K61a-column-width-inline.jpg');">
-        <p class="large">1</p>
+    <div class="front" style="background-image: url('{{register.img_url}}');">
+        <p class="large">{{register.id}}</p>
     </div>
     <div class="back">
       <div>
-    <div class="title">Drive <span class="release_date">(2011)</span></div>
+    <div class="title">{{register.title}} <span class="release_date">({{register.year}})</span></div>
         <div class="rating">
-            <label>7.5</label>
+            <label>{{register.rating}}</label>
           <i class="fas fa-star star"></i>
         </div>
-          <p class="review">"Loved it!"</p>
+          <p class="review">{{register.review}}</p>
         <p class="overview">
-            A mysterious Hollywood stuntman and mechanic moonlights as a getaway driver and finds himself in trouble when he helps out his neighbor in this action drama.
+            {{register.description}}
         </p>
 
-        <a href="#" class="button">Update</a>
-        <a href="#" class="button delete-button">Delete</a>
+        <a href="{{url_for('rate_movie', id=register.id)}}" class="button">Update</a>
+        <a href="{{url_for('delete', id=register.id)}}" class="button delete-button">Delete</a>
 
       </div>
     </div>
   </div>
+  {% endfor %}
 </div>
 <div class="container text-center add">
-<a href="#" class="button">Add Movie</a>
+<a href="{{url_for('add_movie')}}" class="button">Add Movie</a>
 </div>
 
 {% endblock %}
