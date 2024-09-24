@@ -1,5 +1,4 @@
 from flask import Flask, render_template, redirect, url_for
-from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text
@@ -14,7 +13,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 # Initialise the CKEditor so that you can use it in make_post.html
 ckeditor = CKEditor(app)
-Bootstrap5(app)
+
 
 # CREATE DATABASE
 class Base(DeclarativeBase):
@@ -32,6 +31,7 @@ class BlogPost(db.Model):
     body: Mapped[str] = mapped_column(Text, nullable=False)
     author: Mapped[str] = mapped_column(String(250), nullable=False)
     img_url: Mapped[str] = mapped_column(String(250), nullable=False)
+    post_topic: Mapped[str] = mapped_column(Text, nullable=False)
 
 
 
